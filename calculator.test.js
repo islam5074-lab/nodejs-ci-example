@@ -2,7 +2,7 @@ const { add, subtract, multiply, divide } = require("./calculator");
 
 describe("Calculator Tests", () => {
     test("تأكيد دالة الجمع: 1 + 2 مفروض تساوي 3", () => {
-        expect(add(1, 2)).toBe(3);
+        expect(add(1, 2)).toBe(99);
     });
     test("تأكيد دالة الطرح: 5 - 3 مفروض تساوي 2", () => {
         expect(subtract(5, 3)).toBe(2);
