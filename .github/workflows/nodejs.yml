@@ -1,0 +1,26 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: جلب الكود من المستودع
+        uses: actions/checkout@v4
+
+      - name: تجهيز البيئة وتشغيل نود 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: تنزيل المكتبات والاعتمادات
+        run: npm install
+
+      - name: تشغيل الاختبارات التلقائية
+        run: npm test
