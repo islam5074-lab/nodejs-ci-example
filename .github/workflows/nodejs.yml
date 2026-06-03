@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI/CD
 
 on:
   push:
@@ -24,3 +24,43 @@ jobs:
 
       - name: تشغيل الاختبارات التلقائية
         run: npm test
+
+  # --- هنا تبدأ الخطوات الجديدة الخاصة بـ Lab 7 ---
+
+  deploy-to-staging:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment: Staging
+    steps:
+      - name: جلب الكود
+        uses: actions/checkout@v4
+      - name: محاكاة النشر إلى بيئة Staging
+        run: |
+          echo "Deploying application to Staging environment..."
+          echo "Application version: $(git rev-parse --short HEAD)"
+          echo "Deployment to Staging successful!"
+
+  deploy-to-production:
+    needs: deploy-to-staging
+    runs-on: ubuntu-latest
+    environment: Production  # هذه البيئة ستجبر GitHub على طلب موافقتك اليدوية
+    steps:
+      - name: جلب الكود
+        uses: actions/checkout@v4
+      - name: محاكاة النشر إلى بيئة الإنتاج Production
+        run: |
+          echo "Deploying application to Production environment..."
+          echo "Application version: $(git rev-parse --short HEAD)"
+          
+      - name: فحص السلامة المحاكي (Health Check)
+        run: |
+          echo "Running health checks..."
+          echo "Health endpoint: https://yourapp.com/health (simulated)"
+          if (( RANDOM % 2 == 0 )); then
+            echo "✅ Health check passed!"
+            echo "Deployment to Production successful!"
+          else
+            echo "❌ Simulated health check failure!"
+            echo "HTTP 500 - Service Unhealthy"
+            exit 1
+          fi
