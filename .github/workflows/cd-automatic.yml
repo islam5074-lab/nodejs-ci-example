@@ -1,0 +1,30 @@
+name: Automatic Production Deployment (CD)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm test
+
+  deploy-to-production-automatic:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    environment: production-auto
+    steps:
+      - uses: actions/checkout@v4
+      - name: Automatic deployment to Production
+        run: |
+          echo "========================================="
+          echo "AUTOMATIC PRODUCTION DEPLOYMENT (CD)"
+          echo "========================================="
+          echo "⚠️ This deployment happened AUTOMATICALLY without human approval!"
+          echo "✅ Production deployment successful!"
